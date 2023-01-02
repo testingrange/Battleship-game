@@ -138,10 +138,10 @@ Before play begins, each player secretly arranges their ships on their primary g
        make target equal to "[x]|"
        // assigning value of a successful target to the varialbe nextTarget to make next move from that point
        nextTarget = target
-    } else if (target not equal empty cell ) {
-        move target to one cell up and then to the next row
+    } else if (target not equal " _ |" ) {
+        move target to one cell up and then to the next row if cells are not empty
     } else {
-        make target equal to miss sign "o"
+        make target equal to miss sign " o |"
     }
 
     if target was successful next hit of the computer should aim to the cell close to previous target
