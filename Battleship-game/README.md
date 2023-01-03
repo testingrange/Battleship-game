@@ -173,11 +173,11 @@ Before play begins, each player secretly arranges their ships on their primary g
 <hr>
 
 ### Version 2.
-It would be nice to have a theme picture on the main page and useful menu
-It would be nice to have a page with rules described
+1. As a user I want to have a theme picture on the main page and useful menu
+2. As a user I want to have a page with rules described
 
 &nbsp;  
 <hr>
 
 ### Version 3.
-It would be nice to have sounds of blasts if hit or misses.
+1. As a user I want to have sounds of blasts if hit or sounds of misses.
