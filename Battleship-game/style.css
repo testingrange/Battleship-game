@@ -1,0 +1,8 @@
+.game-field {
+    height: 13rem;
+    width: 13rem;
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 3rem 2rem 0 2rem;
+}
+
