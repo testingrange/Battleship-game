@@ -8,6 +8,8 @@
 //Need to put link on fontawesome for missing fire sign
 const fieldCont = document.querySelector(".game-field")
 const actionFld = document.querySelector(".action-field")
+const controllsPlace = document.querySelector(".controlls")
+const infoContainer = document.querySelector(".info-container")
 const shipSchema = {Battleship: [4, 1],
                     Cruiser: [3, 2],
                     Submarine: [2, 3],
@@ -78,29 +80,29 @@ const setUpShip = (field, x, y) => {
     field[y][x] = "[_]|"
 }
 
-setUpShip(playerField, 5, "d")
-setUpShip(playerField, 5, "e")
-setUpShip(playerField, 5, "f")
-represent(playerField)
+// setUpShip(playerField, 5, "d")
+// setUpShip(playerField, 5, "e")
+// setUpShip(playerField, 5, "f")
+// represent(playerField)
 
 
-const hit = (field, x, y) => {
+// const hit = (field, x, y) => {
 
-    if (field[y][x] == "[_]|"){
-        field[y][x] = "[x]|"
-    } else if (field[y][x] == " _ |"){
-        field[y][x] = " O |"
-    } else {
-        console.log("Not valid input!")
-    }
-}
+//     if (field[y][x] == "[_]|"){
+//         field[y][x] = "[x]|"
+//     } else if (field[y][x] == " _ |"){
+//         field[y][x] = " O |"
+//     } else {
+//         console.log("Not valid input!")
+//     }
+// }
 
-hit(playerField, 5, "d")
-hit(playerField, 5, "d")
-hit(playerField, 6, "g")
-hit(playerField, 6, "j")
-hit(playerField, 6, "g")
-represent(playerField)
+// hit(playerField, 5, "d")
+// hit(playerField, 5, "d")
+// hit(playerField, 6, "g")
+// hit(playerField, 6, "j")
+// hit(playerField, 6, "g")
+// represent(playerField)
 
 
 const generateFld = () => {
@@ -132,13 +134,11 @@ const generateFld = () => {
         div.style.border = "solid 1px black"
         div.style.marginRight = "1px"
         div.style.backgroundColor = "#9ED5C5"
-        div.classList.add("square")
+        div.classList.add("square-pf")
+        div.setAttribute('id', `pf-j${j-1}i${i-1}`)
         //event listener for situating the ships
         div.addEventListener('click', () => {
-            if (playerField[liters[j-1]][i-1] == "[_]|"){
-                div.style.backgroundColor = "red"
-                playerField[liters[j-1]][i-1] = "[x]|"
-            } else if (playerField[liters[j-1]][i-1] == " _ |"){
+            if (playerField[liters[j-1]][i-1] == " _ |"){
                 div.style.backgroundColor = "#635666"
                 setUpShip(playerField, i-1, liters[j-1])
             }
@@ -158,7 +158,7 @@ const generateFld = () => {
         header.style.marginBottom = "0"
 })
 }
-generateFld()
+
 
 const generateActionFld = () => {
     for (let j=0; j<=liters.length; j++) {
@@ -189,22 +189,25 @@ const generateActionFld = () => {
         div.style.border = "solid 1px black"
         div.style.marginRight = "1px"
         div.style.backgroundColor = "#9ED5C5"
-        div.classList.add("square")
+        div.setAttribute('id', `af-j${j-1}i${i-1}`)
+        div.classList.add("square-af")
         //event listener for situating the ships
-        div.addEventListener('click', () => {
-            if (actionField[liters[j-1]][i-1] == "[_]|"){
-                div.style.backgroundColor = "red"
-                actionField[liters[j-1]][i-1] = "[x]|"
-            } else if (actionField[liters[j-1]][i-1] == " _ |"){
-                div.style.backgroundColor = "#635666"
-                setUpShip(actionField, i-1, liters[j-1])
-            }
+        // div.addEventListener('click', () => {
+        //     if (actionField[liters[j-1]][i-1] === "[_]|"){
+        //         div.style.backgroundColor = "red"
+        //         actionField[liters[j-1]][i-1] = "[x]|"
+        //     } else if (actionField[liters[j-1]][i-1] === " _ |"){
+        //         actionField[liters[j-1]][i-1] = " o |"
+        //         //div.style.backgroundColor = "#635666"
+        //         div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+        //         //setUpShip(actionField, i-1, liters[j-1])
+        //     }
         
 
-            // need checker for existing ships
-            // refresh the game field in console
-            represent(actionField)
-        })
+        //     // need checker for existing ships
+        //     // refresh the game field in console
+        //     represent(actionField)
+        // })
         }
         actionFld.appendChild(div)
         }
@@ -215,10 +218,10 @@ const generateActionFld = () => {
         header.style.marginBottom = "0"
 })
 }
-const check = (field, x, y) => {
-    field[liters[y]][x] = " Y |"
-    represent(field)
-}
+// const check = (field, x, y) => {
+//     field[liters[y]][x] = " Y |"
+//     represent(field)
+// }
 const situateShip = (field, lenOfShip) => {
     // Function for verification that cells where it is planned to situate ships are not occupied and for situating ships after that 
     console.log("SituateShip method starts")
@@ -463,24 +466,46 @@ const situateShip = (field, lenOfShip) => {
     represent(field)
 }
 
-// const shipSchema = {Battleship: [4, 1],
-//     Cruiser: [3, 2],
-//     Submarine: [2, 3],
-//     Destroyer: [1, 4]
+// Check that field is empty
 
-// }
-
-
-const placeShips = (field) => {
-    for (let key in shipSchema){
-        for (let i = 0; i<shipSchema[key][1];i++){
-            situateShip(field, shipSchema[key][0])
-        }        
+const fieldEmpty = (field) => {
+    for (let i=0; i<liters.length; i++){
+        for (let j=0; j<field[liters[i]].length; j++){
+            if (field[liters[i]][j] !== " _ |") return false
+        }
     }
+    return true
 }
 
 
-generateActionFld()
+// Check that at least one opponent's ship exist
+
+const shipsExist = (field) => {
+    for (let i=0; i<liters.length; i++){
+        for (let j=0; j<field[liters[i]].length; j++){
+            if (field[liters[i]][j] !== "[_]|") return true
+        }
+    }
+    return false
+}
+
+
+const placeShips = (field) => {
+    if (fieldEmpty(field)){
+        for (let key in shipSchema){
+            for (let i = 0; i<shipSchema[key][1];i++){
+                situateShip(field, shipSchema[key][0])
+            }
+        }
+    } else {
+        console.log("Field is not empty")
+        return false
+    }
+
+}
+
+
+
 const initGame = () => {
     //Here user should be prompted to situate ships
     //number of ships will be checked and whole correctness of ship situation is checked here
@@ -499,10 +524,42 @@ const initGame = () => {
 
 // Need function for verifying that ships are exists that takes params field to check after each other's turn
 
+
+
+// Render the fields
+
+const render = (field) => {
+    let selector
+    if (field === playerField) {
+        selector = "pf"
+    } else {
+        selector = "af"
+    }
+    for (let j=0; j<liters.length; j++){
+        for (let i=0; i<field[liters[j]].length; i++){
+            if (field[liters[j]][i] === "[x]|"){
+                document.getElementById(`${selector}-j${j}i${i}`).style.backgroundColor = "red"
+            } else if (field[liters[j]][i] === " O |"){
+                document.getElementById(`${selector}-j${j}i${i}`).innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+            }
+        }
+    }
+
+}
+
+const gameover = () => {
+    const infoField = document.querySelector(".info-messages")
+    const information = document.createElement('h1') 
+    information.innerText = "Game Over"
+    infoField.appendChild(information)
+    infoContainer.appendChild(infoField)
+}
+
 // Need function for computer's shooting
 
 
 const shoot = (field) => {
+    setTimeout(2000)
     const x = Math.floor(Math.random() * 10)
     const y = Math.floor(Math.random() * 10)
 
@@ -515,11 +572,139 @@ const shoot = (field) => {
         field[liters[y]][x] = "[x]|"
         // If that wasn't the last ship's cell
         lastHit = field[liters[y]][x]
+        if (shipsExist(playerField)){
+            shoot(field)
+        }else{
+            console.log("Game over")
+            gameover()
+        }
     } else {
         shoot(field)
     }
     represent(field)
+    render(field)
+    shipsExist(playerField)
 }
 
+const userShoot = (field) => {
+
+    if (field == actionField){
+        console.log("*****")
+        console.log(field)
+
+        for (let j=0; j<liters.length; j++){
+            for (let i=0; i<field[liters[j]].length; i++){
+                const div = document.getElementById(`af-j${j}i${i}`)
+                div.addEventListener('click', () => {
+                    console.log(`af-j${j}i${i}`)
+                    if (actionField[liters[j]][i] === "[_]|"){
+                        div.style.backgroundColor = "red"
+                        actionField[liters[j]][i] = "[x]|"
+                        if (!shipsExist(actionField)){
+                            console.log("Game over")
+                            gameover()
+                        } else {
+                            console.log("Keep on playing!")
+                        }
+                    } else if (actionField[liters[j]][i] === " _ |"){
+                        actionField[liters[j]][i] = " o |"
+                        //div.style.backgroundColor = "#635666"
+                        div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+                        //setUpShip(actionField, i-1, liters[j-1])
+                        shoot(playerField)
+                    }
+                
+                // addEventListener('click', () => {
+                //     if (field[liters[j]][i] === "[x]|"){
+                //         document.getElementById(`j${j}i${i}`).style.backgroundColor = "red"
+                //     } else if (field[liters[j]][i] === " O |"){
+                //         document.getElementById(`j${j}i${i}`).innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+                //     }
+                })
+
+                // div.addEventListener('click', shoot(playerField))
+                
+                // div.addEventListener('click', () => {
+                //     if (actionField[liters[j-1]][i-1] === "[_]|"){
+                //         div.style.backgroundColor = "red"
+                //         actionField[liters[j-1]][i-1] = "[x]|"
+                //     } else if (actionField[liters[j-1]][i-1] === " _ |"){
+                //         actionField[liters[j-1]][i-1] = " o |"
+                //         //div.style.backgroundColor = "#635666"
+                //         div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+                //         //setUpShip(actionField, i-1, liters[j-1])
+                //     }
+                
+        
+                //     // need checker for existing ships
+                //     // refresh the game field in console
+                //     represent(actionField)
+                // })
+
+            }
+        }
+    }
+
+    // const x = Math.floor(Math.random() * 10)
+    // const y = Math.floor(Math.random() * 10)
+
+    // // Create function to verify that 
+    // if (field[liters[y]][x] === " _ |"){
+    //     field[liters[y]][x] = " O |"
+    //     // if check for last ship passed
+    //     lastHit = undefined
+    // } else if(field[liters[y]][x] === "[_]|"){
+    //     field[liters[y]][x] = "[x]|"
+    //     // If that wasn't the last ship's cell
+    //     lastHit = field[liters[y]][x]
+    // } else {
+    //     shoot(field)
+    // }
+    represent(field)
+    render(field)
+    shipsExist(actionField)
+}
+
+const battle = () => {
+
+    if (Math.random()>0.5){
+        userShoot(actionField)
+    }else{
+        shoot(playerField)
+    }
+}
+
+
+
 // Check that around hit ship there are other cells containing ship if not message destroyed should appear
+const readyForBattle = () => {
+    const button = document.createElement('ul')
+    const buttonReady = document.createElement('li')
+    buttonReady.style.height = "1.5rem"
+    buttonReady.style.width = "3rem"
+    buttonReady.style.border = "black solid 1px"
+    buttonReady.style.borderRadius = "10%"
+    buttonReady.style.textAlign = "center"
+    buttonReady.style.backgroundColor = "orange"
+    buttonReady.style.display = "inline-block"
+
+    buttonReady.innerText = "Ready"
+    buttonReady.addEventListener('click', () => {
+        console.log("Click!")
+        userShoot(actionField)
+    })
+    button.appendChild(buttonReady)
+    controllsPlace.appendChild(button)
+}
+
+const game = () => {
+
+    generateFld()
+    generateActionFld()
+    placeShips(actionField)
+    readyForBattle()
+
+
+}
+game()
 
