@@ -106,6 +106,20 @@ const setUpShip = (field, x, y) => {
 
 
 const generateFld = () => {
+
+    const placeShip = function(div, j, i) {
+
+        if(playerField[liters[j-1]][i-1] == " _ |"){
+            div.style.backgroundColor = "#635666"
+            setUpShip(playerField, i-1, liters[j-1])
+        }
+    }
+
+
+    // need checker for existing ships
+    // refresh the game field in console
+    represent(playerField)
+
     for (let j=0; j<=liters.length; j++) {
         for (let i=0; i<=10; i++) {
         const div = document.createElement('div')
@@ -137,17 +151,29 @@ const generateFld = () => {
         div.classList.add("square-pf")
         div.setAttribute('id', `pf-j${j-1}i${i-1}`)
         //event listener for situating the ships
-        div.addEventListener('click', () => {
-            if (playerField[liters[j-1]][i-1] == " _ |"){
-                div.style.backgroundColor = "#635666"
-                setUpShip(playerField, i-1, liters[j-1])
-            }
+
+
+
+        // div.addEventListener('click', () => {
+        //     if (playerField[liters[j-1]][i-1] == " _ |"){
+        //         div.style.backgroundColor = "#635666"
+        //         setUpShip(playerField, i-1, liters[j-1])
+        //     }
         
 
-            // need checker for existing ships
-            // refresh the game field in console
-            represent(playerField)
+        //     // need checker for existing ships
+        //     // refresh the game field in console
+        //     represent(playerField)
+        // })
+
+
+        div.addEventListener("click", function(){
+            placeShip(div, j, i)
         })
+
+
+
+
         }
         fieldCont.appendChild(div)
         }
@@ -375,7 +401,7 @@ const situateShip = (field, lenOfShip) => {
                     }
                 }
             }else if(xPos + lenOfShip === 9){
-                for (let i = (xPos-1); i < (xPos + lenOfShip); i++){
+                for (let i = (xPos-1); i < (xPos + lenOfShip+1); i++){
                     if(field[liters[ranNum]][i] !== " _ |" || field[liters[ranNum+1]][i] !== " _ |"){
                         console.log("Cells are not empty. Try positioning again.")
                         console.log(`${field[liters[ranNum]][i]}, ${field[liters[ranNum+1]][i]}`)
@@ -406,8 +432,8 @@ const situateShip = (field, lenOfShip) => {
                         return situateShip(field, lenOfShip)
                     }
                 }
-            }else if((xPos + lenOfShip) === 9){
-                    for (let i = xPos-1; i < xPos + lenOfShip; i++){
+            }else if((xPos + lenOfShip+1) === 9){
+                    for (let i = xPos-1; i < xPos + lenOfShip +1; i++){
                         if(field[liters[ranNum]][i] !== " _ |" || field[liters[ranNum-1]][i] !== " _ |"){
                             console.log("Cells are not empty. Try positioning again.")
                             console.log(`${field[liters[ranNum]][i]}, ${field[liters[ranNum-1]][i]}`)
@@ -439,7 +465,7 @@ const situateShip = (field, lenOfShip) => {
                     }
                 }
             }else if((xPos + lenOfShip) === 9){
-                    for (let i = (xPos-1); i < (xPos + lenOfShip); i++){
+                    for (let i = (xPos-1); i < (xPos + lenOfShip+1); i++){
                         if(field[liters[ranNum]][i] !== " _ |" || field[liters[ranNum-1]][i] !== " _ |" || field[liters[ranNum+1]][i] !== " _ |"){
                             console.log("Cells are not empty. Try positioning again.")
                             console.log(`${field[liters[ranNum]][i]}, ${field[liters[ranNum-1]][i]}, ${field[liters[ranNum+1]][i]}`)
@@ -483,7 +509,7 @@ const fieldEmpty = (field) => {
 const shipsExist = (field) => {
     for (let i=0; i<liters.length; i++){
         for (let j=0; j<field[liters[i]].length; j++){
-            if (field[liters[i]][j] !== "[_]|") return true
+            if (field[liters[i]][j] === "[_]|") return true
         }
     }
     return false
@@ -547,19 +573,13 @@ const render = (field) => {
 
 }
 
-const gameover = () => {
-    const infoField = document.querySelector(".info-messages")
-    const information = document.createElement('h1') 
-    information.innerText = "Game Over"
-    infoField.appendChild(information)
-    infoContainer.appendChild(infoField)
-}
+
 
 // Need function for computer's shooting
 
 
 const shoot = (field) => {
-    setTimeout(2000)
+    setTimeout(3000)
     const x = Math.floor(Math.random() * 10)
     const y = Math.floor(Math.random() * 10)
 
@@ -586,92 +606,71 @@ const shoot = (field) => {
     shipsExist(playerField)
 }
 
-const userShoot = (field) => {
+const gameOn = true
 
-    if (field == actionField){
-        console.log("*****")
-        console.log(field)
+const gameover = () => {
+    const infoField = document.querySelector(".info-messages")
+    const information = document.createElement('h1') 
+    information.classList
 
-        for (let j=0; j<liters.length; j++){
-            for (let i=0; i<field[liters[j]].length; i++){
-                const div = document.getElementById(`af-j${j}i${i}`)
-                div.addEventListener('click', () => {
-                    console.log(`af-j${j}i${i}`)
-                    if (actionField[liters[j]][i] === "[_]|"){
-                        div.style.backgroundColor = "red"
-                        actionField[liters[j]][i] = "[x]|"
-                        if (!shipsExist(actionField)){
-                            console.log("Game over")
-                            gameover()
-                        } else {
-                            console.log("Keep on playing!")
-                        }
-                    } else if (actionField[liters[j]][i] === " _ |"){
-                        actionField[liters[j]][i] = " o |"
-                        //div.style.backgroundColor = "#635666"
-                        div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
-                        //setUpShip(actionField, i-1, liters[j-1])
-                        shoot(playerField)
-                    }
-                
-                // addEventListener('click', () => {
-                //     if (field[liters[j]][i] === "[x]|"){
-                //         document.getElementById(`j${j}i${i}`).style.backgroundColor = "red"
-                //     } else if (field[liters[j]][i] === " O |"){
-                //         document.getElementById(`j${j}i${i}`).innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
-                //     }
-                })
-
-                // div.addEventListener('click', shoot(playerField))
-                
-                // div.addEventListener('click', () => {
-                //     if (actionField[liters[j-1]][i-1] === "[_]|"){
-                //         div.style.backgroundColor = "red"
-                //         actionField[liters[j-1]][i-1] = "[x]|"
-                //     } else if (actionField[liters[j-1]][i-1] === " _ |"){
-                //         actionField[liters[j-1]][i-1] = " o |"
-                //         //div.style.backgroundColor = "#635666"
-                //         div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
-                //         //setUpShip(actionField, i-1, liters[j-1])
-                //     }
-                
-        
-                //     // need checker for existing ships
-                //     // refresh the game field in console
-                //     represent(actionField)
-                // })
-
-            }
-        }
-    }
-
-    // const x = Math.floor(Math.random() * 10)
-    // const y = Math.floor(Math.random() * 10)
-
-    // // Create function to verify that 
-    // if (field[liters[y]][x] === " _ |"){
-    //     field[liters[y]][x] = " O |"
-    //     // if check for last ship passed
-    //     lastHit = undefined
-    // } else if(field[liters[y]][x] === "[_]|"){
-    //     field[liters[y]][x] = "[x]|"
-    //     // If that wasn't the last ship's cell
-    //     lastHit = field[liters[y]][x]
-    // } else {
-    //     shoot(field)
-    // }
-    represent(field)
-    render(field)
-    shipsExist(actionField)
+    information.innerText = "Game Over"
+    infoField.appendChild(information)
+    infoContainer.appendChild(infoField)
+    //remove event listener from action field
+    // const actionFieldElements = document.querySelectorAll(".square-af")
+    // actionFieldElements.forEach(el => el.removeEventListener("click", userActionHandler))
+        // for (let j=0; j<liters.length; j++){
+        //     for (let i=0; i<actionField[liters[j]].length; i++){
+        //         const div = document.getElementById(`af-j${j}i${i}`)
+        //         div.removeEventListener('click', function(){
+        //             userActionHandler(div, j, i)
+        //         })
+        //     }
+        // }
+    return true
 }
 
-const battle = () => {
 
+const userShoot = () => {
+    // Adding functionality and logic to actionField for user's interaction
+
+    const userActionHandler = (div, j, i) => {
+        if (actionField[liters[j]][i] === "[_]|"){
+            div.style.backgroundColor = "red"
+            actionField[liters[j]][i] = "[x]|"
+            if (!shipsExist(actionField)){
+                console.log("Game over")
+                gameover()
+            } else {
+                console.log("Keep on playing!")
+            }
+            represent(actionField)
+        } else if (actionField[liters[j]][i] === " _ |"){
+            actionField[liters[j]][i] = " o |"
+            div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
+            represent(actionField)
+            shoot(playerField)
+        }
+    }
+ 
+    for (let j=0; j<liters.length; j++){
+        for (let i=0; i<actionField[liters[j]].length; i++){
+            const div = document.getElementById(`af-j${j}i${i}`)
+            div.addEventListener('click', function(){
+                userActionHandler(div, j, i)
+            })
+        }
+    }
+}
+
+
+
+
+const battle = () => {
     if (Math.random()>0.5){
-        userShoot(actionField)
-    }else{
         shoot(playerField)
     }
+    userShoot()
 }
 
 
@@ -690,8 +689,9 @@ const readyForBattle = () => {
 
     buttonReady.innerText = "Ready"
     buttonReady.addEventListener('click', () => {
-        console.log("Click!")
-        userShoot(actionField)
+        buttonReady.classList.add("switch-off")
+        battle()
+        
     })
     button.appendChild(buttonReady)
     controllsPlace.appendChild(button)
@@ -708,3 +708,4 @@ const game = () => {
 }
 game()
 
+//Check for ships -> store them to an object with coordinates Then run check for those coordinates and if ship is destroyed give out message that ship is destroyed and put crosses around it.

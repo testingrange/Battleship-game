@@ -6,3 +6,8 @@
     margin: 1rem 2rem 0 2rem;
 }
 
+
+
+.switch-off {
+    visibility: hidden;
+}
