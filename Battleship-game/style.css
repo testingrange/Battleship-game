@@ -1,3 +1,32 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    display: inline-block;
+    border: solid black 1px;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+h3 {
+    margin: 0;
+    background-color: gold;
+    border: solid black 1px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.info-messages {
+    height: 2rem;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+.info-message2 {
+    height: 2rem;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
 .game-field {
     height: 13rem;
     width: 13rem;
@@ -6,8 +35,19 @@
     margin: 1rem 2rem 0 2rem;
 }
 
-
+.game-pannel {
+    text-align: center;
+    border: solid black 1px;
+    border-radius: 5px;
+    display: inline-block;
+    padding-bottom: 3rem;
+    padding-top: 2rem;
+}
 
 .switch-off {
     visibility: hidden;
+}
+
+.switch-on {
+    visibility: visible;
 }
