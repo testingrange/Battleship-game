@@ -1,25 +1,15 @@
-//initialize the game
-//situate the ships on the map
-//start game
-//while situating the ships need to check that they have at least 1 square space between them
-//When situating the ships need to set them up one by one
-//When one ship is situated user press button and goes to the next one untill all the ships are done
-//Need to generate computer's ships on the map
-//Need to put link on fontawesome for missing fire sign
+
 const fieldCont = document.querySelector(".game-field")
 const actionFld = document.querySelector(".action-field")
 const controllsPlace = document.querySelector(".controlls")
 const infoContainer = document.querySelector(".info-container")
 const shipSchema = { Battleship: [4, 1],
-//                     Cruiser: [3, 2],
-//                     Submarine: [2, 3],
-                    // Destroyer: [1, 4]
-
+                    Cruiser: [3, 2],
+                    Submarine: [2, 3],
+                    Destroyer: [1, 4]
 }
-// Variable for storing last successful hit
-let lastHit
 
-
+// Storing user's field 
 const playerField = {
 a: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"],
 b: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"],
@@ -33,6 +23,7 @@ i: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ 
 j: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"]
 } 
 
+// Storing computer's field
 const actionField = {
     a: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"],
     b: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"],
@@ -46,19 +37,16 @@ const actionField = {
     j: [" _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |", " _ |"]
     } 
 
-//playerField[letters[ind]]
-
+// PlayerField[letters[ind]]
 const letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
 
-function represent(field){
-    //console.clear()
 
+// Function for representation of the field in the console
+function represent(field){
     console.log(
         `    0   1   2   3   4   5   6   7   8   9 `)
-
     console.log(
         `    _   _   _   _   _   _   _   _   _   _ `)
-
     for (let ind = 0; ind<letters.length; ind++){
     console.log(
         `${letters[ind]} |${field[letters[ind]][0]}${field[letters[ind]][1]}${field[letters[ind]][2]}${field[letters[ind]][3]}${field[letters[ind]][4]}${field[letters[ind]][5]}${field[letters[ind]][6]}${field[letters[ind]][7]}${field[letters[ind]][8]}${field[letters[ind]][9]}`
@@ -68,28 +56,23 @@ function represent(field){
 
 
 represent(playerField)
-
 const numOfShips = {
-
 }
 
-console.log(playerField)
 
-//input your ship on the field (Args are 1: the field 2: numerical coordinate (0-9) 3: literal coordinate (a-j))
+// Input your ship on the field (Args are 1: the field 2: numerical coordinate (0-9) 3: literal coordinate (a-j))
 const setUpShip = (field, x, y) => {
     field[y][x] = "[_]|"
 }
 
-const generateFld = () => {
 
+const generateFld = () => {
     // need checker for existing ships
     // refresh the game field in console
     represent(playerField)
-
     for (let j=0; j<=letters.length; j++) {
         for (let i=0; i<=10; i++) {
         const div = document.createElement('div')
-        
         div.style.height = "1rem"
         div.style.width = "1rem"
         div.style.display = "inline-block"
@@ -226,9 +209,9 @@ const placeShip = () => {
 }
 
 
-
+// Function for verification that cells where it is planned to situate ships are not occupied and for situating ships after that 
 const situateShip = (field, lenOfShip) => {
-    // Function for verification that cells where it is planned to situate ships are not occupied and for situating ships after that 
+    
     console.log("SituateShip method starts")
     console.log(field[letters[9]])
     console.log(field[letters[10]])
@@ -244,16 +227,7 @@ const situateShip = (field, lenOfShip) => {
     //console.log("vertical", vertical )
     const ranNum = Math.floor(Math.random()*field[letters[0]].length)
     if (Math.random()>0.5) {
-        // setUpShip = (field, x, y)
-        // create a check for empty cells and space around
-        // go ahead and check if the initial cell of the ship is empty
-        // check if the cell prior to the initial cell is empty if the initial cell not the edge of the field
-        // check cells on the right and on the left from the cell where the ship is to be placed to be empty if they're not situated on the edge of the game field. 
-        console.log(`ranNum = ${ranNum}`)
-        console.log(`yPos = ${yPos}`)
-        // Checking there are no ships when ship is positioned close to "1" line
         if (yPos === 0) {
-            console.log("First condition")
             if (ranNum === 0) {
                 
                 for (let i=yPos; i<(yPos + lenOfShip+1); i++){
@@ -462,7 +436,6 @@ const situateShip = (field, lenOfShip) => {
                 }
             }
         }
-
         console.log("It's horizontal")
         for (let i=xPos; i<(xPos + lenOfShip); i++){
              field[letters[ranNum]][i] = "[_]|"
@@ -471,8 +444,8 @@ const situateShip = (field, lenOfShip) => {
     represent(field)
 }
 
-// Check that field is empty
 
+// Check that field is empty
 const fieldEmpty = (field) => {
     for (let i=0; i<letters.length; i++){
         for (let j=0; j<field[letters[i]].length; j++){
@@ -484,7 +457,6 @@ const fieldEmpty = (field) => {
 
 
 // Check that at least one opponent's ship exist
-
 const shipsExist = (field) => {
     for (let i=0; i<letters.length; i++){
         for (let j=0; j<field[letters[i]].length; j++){
@@ -494,8 +466,8 @@ const shipsExist = (field) => {
     return false
 }
 
-// Check that field is empty if true -> place ships
 
+// Check that field is empty if true -> place ships
 const placeShips = (field) => {
     if (fieldEmpty(field)){
         for (let key in shipSchema){
@@ -507,9 +479,7 @@ const placeShips = (field) => {
         console.log("Field is not empty")
         return false
     }
-
 }
-
 
 
 const initGame = () => {
@@ -519,21 +489,7 @@ const initGame = () => {
 }
 
 
-// game
-// game field for user's action
-// when user click
-
-
-//Need function for positioning user's ships and storing them in the varialbe after pressing the button - start placing ships on the screen
-
-// Need function for 
-
-// Need function for verifying that ships are exists that takes params field to check after each other's turn
-
-
-
 // Render the fields
-
 const render = (field) => {
     let selector
     if (field === playerField) {
@@ -550,8 +506,9 @@ const render = (field) => {
             }
         }
     }
-
 }
+
+
 // Info message which turn is it now
 const turn = (player) => {
     if (document.querySelector("h3")){
@@ -569,17 +526,18 @@ const turn = (player) => {
 
 
 const shoot = (field) => {
-    turn("Computer")
+    turn("Computer's")
+    stopUserActions()
     setTimeout(() => {
-
         const x = Math.floor(Math.random() * 10)
         const y = Math.floor(Math.random() * 10)
-        // Create function to verify that 
+        // Create function to verify that
         if (field[letters[y]][x] === " _ |"){
             field[letters[y]][x] = " O |"
             // if check for last ship passed
             lastHit = undefined
-            turn("User")
+            turn("User's")
+            userShoot()
         } else if(field[letters[y]][x] === "[_]|"){
             field[letters[y]][x] = "[x]|"
             // If that wasn't the last ship's cell
@@ -596,11 +554,10 @@ const shoot = (field) => {
         represent(field)
         render(field)
         shipsExist(playerField)
-    }, 500)
-    
-
-    
+    }, 300)
 }
+
+
 
 const fieldReset = (field) => {
     for (let i=0; i<letters.length; i++){
@@ -612,18 +569,10 @@ const fieldReset = (field) => {
     }
 }
 
-
-
-const gameOn = true
-
+// Actual functionality to be added to actionField active elements
 const userActionHandler = (event) => {
-    // af-j1i1 This is id for B2 cell 
-    // YX
-    // div, j, i
     const div = event.target
-    console.log(div)
     const divId = div.id
-    console.log(divId)
     const i = divId[6]
     const j = divId[4]
 
@@ -633,8 +582,6 @@ const userActionHandler = (event) => {
         if (!shipsExist(actionField)){
             console.log("Game over")
             gameover("User")
-        } else {
-            console.log("Keep on playing!")
         }
         represent(actionField)
     } else if (actionField[letters[j]][i] === " _ |"){
@@ -642,6 +589,17 @@ const userActionHandler = (event) => {
         div.innerHTML = "<h6 style='margin: 0.2rem .3rem'>X</h6>"
         represent(actionField)
         shoot(playerField)
+    }
+}
+
+const stopUserActions = () => {
+    // Stop accepting user action signals
+    // Removing event Listeners from all the actionField active pieces
+    for (let j=0; j<letters.length; j++){
+        for (let i=0; i<actionField[letters[j]].length; i++){
+            const div = document.getElementById(`af-j${j}i${i}`)
+            div.removeEventListener('click', userActionHandler)
+        }
     }
 }
 
@@ -653,25 +611,11 @@ const gameover = (player) => {
     const information = document.createElement('h3') 
     information.innerText = "Game Over"
     infoField.appendChild(information)
-    // infoContainer.appendChild(infoField)
-
     const infoField2 = document.querySelector(".info-message2")
     const winner = document.createElement('h3') 
     winner.innerText = `${player} wins!`
     infoField2.appendChild(winner)
-    // Stop game from playing
-    // We need to get all the pieces to remove eventlistener from them
-    for (let j=0; j<letters.length; j++){
-        for (let i=0; i<actionField[letters[j]].length; i++){
-            const div = document.getElementById(`af-j${j}i${i}`)
-            div.removeEventListener('click', userActionHandler)
-        }
-        
-    }
-    // remove all event listeners
-    console.log("Inside game over")
-
-    // Adding button for restart a game
+    stopUserActions()
     const button = document.querySelector('ul')
     const buttonRestart = document.createElement('li')
     buttonRestart.style.height = "1.5rem"
@@ -681,12 +625,8 @@ const gameover = (player) => {
     buttonRestart.style.textAlign = "center"
     buttonRestart.style.backgroundColor = "orange"
     buttonRestart.style.display = "inline-block"
-
     buttonRestart.innerText = "Restart"
-
     buttonRestart.addEventListener('click', () => {
-        // readyButton = document.querySelector(".switch-off")
-        // readyButton.class
         buttonRestart.classList.add("switch-off")
         const elems = document.querySelectorAll('.sq')
         elems.forEach(element => element.remove())
@@ -695,16 +635,9 @@ const gameover = (player) => {
         document.querySelector('ul').remove()
         const elements = document.querySelectorAll('h3')
         elements.forEach(el => el.remove())
-
         game()
-
- 
-        
     })
     button.appendChild(buttonRestart)
-    // controllsPlace.appendChild(button)
-  
-
     return true
 }
 
@@ -722,7 +655,7 @@ const userShoot = () => {
 
 
 
-
+// battle function for deciding who is starting first
 const battle = () => {
     if (Math.random()>0.5){
         shoot(playerField)
@@ -732,11 +665,17 @@ const battle = () => {
     userShoot()
 }
 
-
+const removeEvntListenerFromActField = () => {
+    for (let j=0; j<letters.length; j++){
+        for (let i=0; i<playerField[letters[j]].length; i++){
+            const div = document.getElementById(`pf-j${j}i${i}`)
+            div.removeEventListener('click', shipPlacementHandler)
+        }
+    }
+}
 
 // Check that around hit ship there are other cells containing ship if not message destroyed should appear
 const readyForBattle = () => {
-
     const button = document.createElement('ul')
     const buttonReady = document.createElement('li')
     buttonReady.classList.add("ready")
@@ -747,21 +686,12 @@ const readyForBattle = () => {
     buttonReady.style.textAlign = "center"
     buttonReady.style.backgroundColor = "orange"
     buttonReady.style.display = "inline-block"
-
     buttonReady.innerText = "Ready"
     buttonReady.addEventListener('click', () => {
-        buttonReady.classList.add("switch-off")
-        for (let j=0; j<letters.length; j++){
-            for (let i=0; i<playerField[letters[j]].length; i++){
-                const div = document.getElementById(`pf-j${j}i${i}`)
-                div.removeEventListener('click', shipPlacementHandler)
-            }
-            
-        }
+        document.querySelector(".ready").remove()
+        removeEvntListenerFromActField()
         battle()
     })
-    // add removeEventListener from userField
-    
     button.appendChild(buttonReady)
     controllsPlace.appendChild(button)
 }
@@ -775,7 +705,6 @@ const showMessage2 = (message, timeOut) => {
         const information = document.createElement('h3') 
         information.innerText = `${message}`
         infoField.appendChild(information)
-
     }, timeOut)
 }
 
@@ -794,9 +723,6 @@ const game = () => {
     generateActionFld()
     placeShips(actionField)
     readyForBattle()
-
-
 }
-game()
 
-//Check for ships -> store them to an object with coordinates Then run check for those coordinates and if ship is destroyed give out message that ship is destroyed and put crosses around it.
+game()
