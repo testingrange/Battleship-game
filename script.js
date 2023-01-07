@@ -80,21 +80,7 @@ const setUpShip = (field, x, y) => {
     field[y][x] = "[_]|"
 }
 
-
-
 const generateFld = () => {
-
-    const placeShip = function(div, j, i) {
-
-        if(playerField[letters[j-1]][i-1] == " _ |"){
-            div.style.backgroundColor = "#635666"
-            setUpShip(playerField, i-1, letters[j-1])
-        } else if (playerField[letters[j-1]][i-1] == "[_]|"){
-            playerField[letters[j-1]][i-1] = " _ |"
-            div.style.backgroundColor = "#9ED5C5"
-        }
-    }
-
 
     // need checker for existing ships
     // refresh the game field in console
@@ -132,33 +118,12 @@ const generateFld = () => {
         div.classList.add("square-pf")
         div.setAttribute('id', `pf-j${j-1}i${i-1}`)
         //event listener for situating the ships
-
-
-
-        // div.addEventListener('click', () => {
-        //     if (playerField[letters[j-1]][i-1] == " _ |"){
-        //         div.style.backgroundColor = "#635666"
-        //         setUpShip(playerField, i-1, letters[j-1])
-        //     }
-        
-
-        //     // need checker for existing ships
-        //     // refresh the game field in console
-        //     represent(playerField)
-        // })
-
-
-        div.addEventListener("click", function(){
-            placeShip(div, j, i)
-        })
-
-
-
-
+        // div.addEventListener("click", placeShip)
         }
         fieldCont.appendChild(div)
         }
     }
+    placeShip()
     const headers = document.querySelectorAll(".gameFld-headers")
     headers.forEach((header) => {
         header.style.marginTop = "0"
@@ -199,6 +164,7 @@ const generateActionFld = () => {
         div.style.backgroundColor = "#9ED5C5"
         div.setAttribute('id', `af-j${j-1}i${i-1}`)
         div.classList.add("square-af")
+        
         //event listener for situating the ships
         // div.addEventListener('click', () => {
         //     if (actionField[letters[j-1]][i-1] === "[_]|"){
@@ -220,16 +186,47 @@ const generateActionFld = () => {
         actionFld.appendChild(div)
         }
     }
+
     const headers = document.querySelectorAll(".gameFld-headers")
     headers.forEach((header) => {
         header.style.marginTop = "0"
         header.style.marginBottom = "0"
 })
 }
-// const check = (field, x, y) => {
-//     field[letters[y]][x] = " Y |"
-//     represent(field)
-// }
+const check = (field, x, y) => {
+    field[letters[y]][x] = " Y |"
+    represent(field)
+}
+const shipPlacementHandler = (event) => {
+    // div, j, i
+    const div = event.target
+    console.log(div)
+    const divId = div.id
+    console.log(divId)
+    const i = divId[6]
+    const j = divId[4]
+    if(playerField[letters[j]][i] == " _ |"){
+        div.style.backgroundColor = "#635666"
+        setUpShip(playerField, i, letters[j])
+    } else if (playerField[letters[j]][i] == "[_]|"){
+        playerField[letters[j]][i] = " _ |"
+        div.style.backgroundColor = "#9ED5C5"
+    }
+}
+
+
+const placeShip = () => {
+    // Adding functionality and logic to actionField for user's interaction
+    for (let j=0; j<letters.length; j++){
+        for (let i=0; i<playerField[letters[j]].length; i++){
+            const div = document.getElementById(`pf-j${j}i${i}`)
+            div.addEventListener('click', shipPlacementHandler)
+        }
+    }
+}
+
+
+
 const situateShip = (field, lenOfShip) => {
     // Function for verification that cells where it is planned to situate ships are not occupied and for situating ships after that 
     console.log("SituateShip method starts")
@@ -555,6 +552,16 @@ const render = (field) => {
     }
 
 }
+// Info message which turn is it now
+const turn = (player) => {
+    if (document.querySelector("h3")){
+        document.querySelector("h3").remove()
+    }
+    const infoField2 = document.querySelector(".info-message2")
+    const turn = document.createElement("h3") 
+    turn.innerText = `${player} turn`
+    infoField2.appendChild(turn)
+}
 
 
 
@@ -562,30 +569,37 @@ const render = (field) => {
 
 
 const shoot = (field) => {
-    const x = Math.floor(Math.random() * 10)
-    const y = Math.floor(Math.random() * 10)
+    turn("Computer")
+    setTimeout(() => {
 
-    // Create function to verify that 
-    if (field[letters[y]][x] === " _ |"){
-        field[letters[y]][x] = " O |"
-        // if check for last ship passed
-        lastHit = undefined
-    } else if(field[letters[y]][x] === "[_]|"){
-        field[letters[y]][x] = "[x]|"
-        // If that wasn't the last ship's cell
-        lastHit = field[letters[y]][x]
-        if (shipsExist(playerField)){
+        const x = Math.floor(Math.random() * 10)
+        const y = Math.floor(Math.random() * 10)
+        // Create function to verify that 
+        if (field[letters[y]][x] === " _ |"){
+            field[letters[y]][x] = " O |"
+            // if check for last ship passed
+            lastHit = undefined
+            turn("User")
+        } else if(field[letters[y]][x] === "[_]|"){
+            field[letters[y]][x] = "[x]|"
+            // If that wasn't the last ship's cell
+            lastHit = field[letters[y]][x]
+            if (shipsExist(playerField)){
+                shoot(field)
+            }else{
+                console.log("Game over")
+                gameover("Computer")
+            }
+        } else {
             shoot(field)
-        }else{
-            console.log("Game over")
-            gameover("Computer")
         }
-    } else {
-        shoot(field)
-    }
-    represent(field)
-    render(field)
-    shipsExist(playerField)
+        represent(field)
+        render(field)
+        shipsExist(playerField)
+    }, 500)
+    
+
+    
 }
 
 const fieldReset = (field) => {
@@ -632,6 +646,9 @@ const userActionHandler = (event) => {
 }
 
 const gameover = (player) => {
+    if (document.querySelector("h3")){
+        document.querySelector("h3").remove()
+    }
     const infoField = document.querySelector(".info-messages")
     const information = document.createElement('h3') 
     information.innerText = "Game Over"
@@ -695,9 +712,6 @@ const gameover = (player) => {
 
 const userShoot = () => {
     // Adding functionality and logic to actionField for user's interaction
-
-    
- 
     for (let j=0; j<letters.length; j++){
         for (let i=0; i<actionField[letters[j]].length; i++){
             const div = document.getElementById(`af-j${j}i${i}`)
@@ -712,6 +726,8 @@ const userShoot = () => {
 const battle = () => {
     if (Math.random()>0.5){
         shoot(playerField)
+    } else{
+        turn("User")        
     }
     userShoot()
 }
@@ -720,6 +736,7 @@ const battle = () => {
 
 // Check that around hit ship there are other cells containing ship if not message destroyed should appear
 const readyForBattle = () => {
+
     const button = document.createElement('ul')
     const buttonReady = document.createElement('li')
     buttonReady.classList.add("ready")
@@ -734,15 +751,45 @@ const readyForBattle = () => {
     buttonReady.innerText = "Ready"
     buttonReady.addEventListener('click', () => {
         buttonReady.classList.add("switch-off")
+        for (let j=0; j<letters.length; j++){
+            for (let i=0; i<playerField[letters[j]].length; i++){
+                const div = document.getElementById(`pf-j${j}i${i}`)
+                div.removeEventListener('click', shipPlacementHandler)
+            }
+            
+        }
         battle()
-        
     })
+    // add removeEventListener from userField
+    
     button.appendChild(buttonReady)
     controllsPlace.appendChild(button)
 }
 
-const game = () => {
+const showMessage2 = (message, timeOut) => {
+    setTimeout(() => {
+        if (document.querySelector("h3")){
+            document.querySelector("h3").remove()
+        }
+        const infoField = document.querySelector(".info-messages")
+        const information = document.createElement('h3') 
+        information.innerText = `${message}`
+        infoField.appendChild(information)
 
+    }, timeOut)
+}
+
+const placeYourShipsMessage = () => {
+        showMessage2("Place your ships", 1000)
+        showMessage2("1 x Battleship 4 cells", 3000)
+        showMessage2("2 x Cruisers 3 cells", 6000)
+        showMessage2("3 x Submarines 2 cells", 9000)
+        showMessage2("4 x Destroyers 1 cell", 12000)
+        showMessage2("Good luck!", 15000)
+}
+
+const game = () => {
+    placeYourShipsMessage()
     generateFld()
     generateActionFld()
     placeShips(actionField)
