@@ -36,7 +36,7 @@ Before play begins, each player secretly arranges their ships on their primary g
 
 
 ## **Technology Used**
-<hr>
+
 The followind technology was used in order to create Battleship:
 
 * JavaScript
@@ -46,12 +46,12 @@ The followind technology was used in order to create Battleship:
 * CSS
 
 ## **Getting Started**
-<hr>
-To play this game live you can click this [link](/Battleship-game)
 
-<br>
-instructions:
-<br>
+To play this game live you can click this [link](/Battleship-game) &nbsp;
+
+
+Instructions:
+
 
 * On the left hand field place your ships by clicking on the game field's cells
 * Place your ships according to the schema in the description part and it is also put in pop up messeges above the game fields
@@ -67,10 +67,8 @@ instructions:
 
 
 ## **Next Steps**
-<hr>
 
 ### Version 2:
-<br>
 
 * As a user I want to have a theme picture on the main page and useful menu
 * As a user I want to have a page with rules described
@@ -78,9 +76,7 @@ instructions:
 * As a user I want to implement a function of verifying the correctness of user's ships placement 
 * As a user I want the statistics of the game to be implemented on the screen
 
-&nbsp;
 ### Version 3:
-<br>
 
 * As a user I want to have a theme picture on the main page and useful menu
 * As a user I want to have a page with rules described
