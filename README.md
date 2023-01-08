@@ -47,7 +47,7 @@ The followind technology was used in order to create Battleship:
 
 ## **Getting Started**
 
-To play this game live you can click this [link](/Battleship-game) &nbsp;
+To play this game live you can click this [link](https://testingrange.github.io/Battleship-game/) &nbsp;
 
 
 Instructions:
